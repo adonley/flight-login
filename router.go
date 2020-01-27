@@ -21,13 +21,12 @@ func NewRouter() http.Handler {
 	router.Use(middleware.DefaultCompress)
 	router.Use(middleware.Timeout(60 * time.Second))
 
-	// Set up our root handlers
-	// router.Get("/", HelloWorld)
-
 	// Set up static file serving
 	staticPath, _ := filepath.Abs("./static/")
 	fs := http.FileServer(unindexed.Dir(staticPath))
 	router.Handle("/*", fs)
+
+	router.Get("/v1/health", Health)
 
 	return router
 }
